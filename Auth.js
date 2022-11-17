@@ -9,6 +9,15 @@ const pokeUser = require('./models/PokeUser')
 const app = express()
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
+const {
+  PokemonBadRequest,
+  PokemonBadRequestMissingID,
+  PokemonBadRequestMissingAfter,
+  PokemonDbError,
+  PokemonNotFoundError,
+  PokemonDuplicateError,
+  PokemonNoSuchRouteError
+} = require("./errors.js")
 
 app.use(express.json())
 
@@ -60,7 +69,7 @@ app.post('/api/v1/register', asyncWrapper(async (req, res) => {
   res.send(user)
 }))
 
-app.post('/login', asyncWrapper(async (req, res) => {
+app.post('/api/v1/login', asyncWrapper(async (req, res) => {
   const { username, password } = req.body
   const user = await pokeModel.findOne({ username })
   if (!user) {
@@ -102,25 +111,4 @@ const saveTokenToLocalStorage = (token) => {
 
 const getTokenFromLocalStorage = () => {
   return localStorage.getItem('token')
-}
-
-class PokemonBadRequest extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "PokemonBadRequest";
-  }
-}
-
-class InvalidLoginRequest extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "Invalid Login Credentials";
-  }
-}
-
-class PokemonBadRequestMissingID extends PokemonBadRequest {
-  constructor(message) {
-    super(message);
-    this.name = "PokemonBadRequestMissingID";
-  }
 }

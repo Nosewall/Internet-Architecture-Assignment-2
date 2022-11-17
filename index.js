@@ -30,8 +30,8 @@ app.use(express.json())
 const database = module.exports = () => {
     try {
         mongoose.connect(process.env.MONG_URI).then(() =>{
-            app.listen(process.env.PORT, () => {
-                console.log("Connected to Poke-base and looking for Poke-pals on port " + process.env.PORT)
+            app.listen(process.env.APIPORT, () => {
+                console.log("Connected to Poke-base and looking for Poke-pals on port " + process.env.APIPORT)
             })
         });
     } catch (error) {
@@ -51,6 +51,8 @@ const asyncWrapper = (fn) => {
     }
   }
 }
+
+
 
 
 app.get('/api/v1/allPokemon', getAllPokemon)
